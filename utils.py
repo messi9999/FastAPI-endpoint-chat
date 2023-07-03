@@ -8,7 +8,7 @@ import json
 load_dotenv()
 
 
-def get_content(url):
+async def get_content(url):
     # Make a GET request to the article URL
     response = requests.get(url)
     if response.status_code == 200:
@@ -16,12 +16,17 @@ def get_content(url):
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Example: Extract the article content using specific HTML tags or class names
+        title = soup.find("title").get_text()
         article_content = ""
         paragraphs = soup.find_all("p")
         for paragraph in paragraphs:
             article_content = article_content + paragraph.get_text() + "\n"
 
-        return {"status_code": response.status_code, "content": article_content}
+        return {
+            "status_code": response.status_code,
+            "content": article_content,
+            "title": title,
+        }
     else:
         return {
             "status_code": response.status_code,
@@ -29,13 +34,13 @@ def get_content(url):
         }
 
 
-def openAI(prompt):
+async def openAI(prompt):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     response = openai.Completion.create(
         engine="text-davinci-003", prompt=prompt, max_tokens=1000
     )
     generated_text = response.choices[0].text.strip()
     print(generated_text)
-    array = eval(generated_text)
+    # array = eval(generated_text)
 
-    return array
+    return generated_text

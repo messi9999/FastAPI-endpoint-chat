@@ -16,7 +16,6 @@ async def startup():
     print("Connecting database...")
     await database.database.connect()
     models.models.Base.metadata.create_all(bind=database.engine)
-    print("Sucessfully connnected")
 
 
 @app.on_event("shutdown")

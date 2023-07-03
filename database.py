@@ -10,8 +10,6 @@ database = Database(database_url)
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base = declarative_base()
-
 
 def get_db_session() -> Session:
     db = SessionLocal()
