@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import openai
 import os
 from dotenv import load_dotenv
-import json
 
 load_dotenv()
 

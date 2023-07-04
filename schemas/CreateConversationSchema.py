@@ -1,6 +1,5 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List
-from Schemas.MessageSchema import MessageSchema
+from pydantic import BaseModel
+from typing import Optional
 
 
 class CreateConversatiionSchema(BaseModel):

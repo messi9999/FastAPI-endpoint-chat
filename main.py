@@ -5,7 +5,6 @@ from api.Chat.routes import chat_router
 from api.User.routes import user_router
 
 import database
-from database import create_tables
 import models
 
 app = FastAPI()

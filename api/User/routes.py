@@ -1,12 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import StreamingResponse
-import io
 
-from database import database, engine, get_db_session
+from database import get_db_session
 from models.models import User
 
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from Schemas.UserSchema import UserSchema
