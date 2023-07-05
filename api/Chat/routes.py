@@ -31,13 +31,14 @@ async def chat(body: ChatSchema, db: Session = Depends(get_db_session)):
     summary = ""
     for r in res["matches"]:
         summary += r["metadata"]["content"]
-    article = limit_string_tokens(summary, max_tokens=2000)
+    article = limit_string_tokens(summary, max_tokens=1000)
 
     # Get Chat history
     chat_array = await get_chat_history(conversationId=conversationId, db=db)
     chat_history = ""
     for chats in chat_array:
-        chat_history = chat_history + chats.ChatGPT + "\n"
+        chat_history = chats.ChatGPT + "\n" + chat_history
+    chat_history = limit_string_tokens(chat_history, max_tokens=2500)
     # Get result answer from ChatGPT
     try:
         print("Waiting ChatGPT")
