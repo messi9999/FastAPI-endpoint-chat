@@ -16,9 +16,11 @@ port = os.getenv("dbPort")
 dbname = os.getenv("dbName")
 
 # database_url = "postgresql://postgres:1234@localhost:5432/ArticalChat"
-database_url = "postgresql://{}:{1234}@{}:{}/{}".format(
+
+database_url = "postgresql://{}:{}@{}:{}/{}".format(
     username, password, host, port, dbname
 )
+print(database_url)
 database = Database(database_url)
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

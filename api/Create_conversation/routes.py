@@ -1,10 +1,17 @@
 from fastapi import APIRouter, Depends
-from utils import get_content
+from utils.utils import get_content
 from Service.Create_conversation import create_Conversation
 
 from sqlalchemy.orm import Session
 from database import get_db_session
 from Schemas.CreateConversationSchema import CreateConversatiionSchema
+
+from utils.save_article_pinecone import (
+    embedding_openAI,
+    chunk_content,
+    embedding_config,
+    embedding_to_pinecone,
+)
 
 create_conversation_router = APIRouter()
 
@@ -29,7 +36,10 @@ async def create_conversation(
         conversation_id = await create_Conversation(
             userId=userId, title=article_title, content=article_content, url=url, db=db
         )
-
+        chunks = chunk_content(article_content, 500)
+        embedded = embedding_openAI(chunks)
+        vectors = embedding_config(chunks, embedded)
+        embedding_to_pinecone(vectors, "article-chat-" + str(conversation_id))
         # Return conversation id
         return {"conversation_id": conversation_id}
 
