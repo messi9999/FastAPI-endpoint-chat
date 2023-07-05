@@ -38,9 +38,9 @@ async def save_message(user_question, ChatGPT, conversationId, db):
 async def get_chat_history(conversationId, db):
     try:
         conversation_data = (
-            db.query(Message).filter(Message.conversationId == conversationId).first()
+            db.query(Message).filter(Message.conversationId == conversationId).all()
         )
         print("Got article from database")
-        return conversation_data.ChatGPT
+        return conversation_data
     except:
         return ""

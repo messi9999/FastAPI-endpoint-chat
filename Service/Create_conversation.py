@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from models.models import Article, Conversation
 from sqlalchemy.exc import IntegrityError
-
+from sqlalchemy import desc
 import datetime
 
 
@@ -11,7 +11,12 @@ async def create_Conversation(userId, title, content, url, db):
         db.add(article)
         db.commit()
         db.refresh(article)
-        article_data = db.query(Article).filter(Article.userId == userId).first()
+        article_data = (
+            db.query(Article)
+            .filter(Article.userId == userId)
+            .order_by(desc(Article.id))
+            .first()
+        )
         conversation = Conversation(
             userId=userId,
             articleId=article_data.id,

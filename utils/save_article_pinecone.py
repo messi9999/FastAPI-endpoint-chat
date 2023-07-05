@@ -99,8 +99,8 @@ def embedding_to_pinecone(vectors, namespace):
 # Search the best matched chunks with question from pinecone
 def searchquery(query, namespace):
     embedding = embedding_openAI(query)
-    api_key = "de03dd78-0bb4-46c8-84c4-501ec4585147"
-    env_value = "us-west4-gcp-free"
+    api_key = os.getenv("PINECONE_API_KEY")
+    env_value = os.getenv("PINECONE_ENV_VALUE")
     try:
         pinecone.init(api_key=api_key, environment=env_value)
         active_indexes = pinecone.list_indexes()

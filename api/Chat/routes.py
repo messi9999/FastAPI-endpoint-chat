@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
-import io
+import io, traceback
 
 from database import get_db_session
 from Service.Chat import save_message, get_chat_history
@@ -24,11 +24,9 @@ async def chat(body: ChatSchema, db: Session = Depends(get_db_session)):
     conversationId = body.conversation_id
     message = body.message
     # Get article
-    query = "What is the main content of this article?"
-    print(query)
     res = searchquery(
         message,
-        "example-namespace" + str(conversationId),
+        "article-chat-" + str(conversationId),
     )
     summary = ""
     for r in res["matches"]:
@@ -39,8 +37,7 @@ async def chat(body: ChatSchema, db: Session = Depends(get_db_session)):
     chat_array = await get_chat_history(conversationId=conversationId, db=db)
     chat_history = ""
     for chats in chat_array:
-        chat_history = chat_history + chats + "\n"
-
+        chat_history = chat_history + chats.ChatGPT + "\n"
     # Get result answer from ChatGPT
     try:
         print("Waiting ChatGPT")
@@ -50,7 +47,8 @@ async def chat(body: ChatSchema, db: Session = Depends(get_db_session)):
         # answer = await openAI(prompt)
         print("Got answer from ChatGPT")
         print(answer)
-    except:
+    except Exception as e:
+        print(traceback.format_exc())
         text = "OpenAI Failed!"
         result = io.BytesIO(text.encode())
         return StreamingResponse(result, media_type="application/octet-stream")

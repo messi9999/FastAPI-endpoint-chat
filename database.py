@@ -20,7 +20,6 @@ dbname = os.getenv("dbName")
 database_url = "postgresql://{}:{}@{}:{}/{}".format(
     username, password, host, port, dbname
 )
-print(database_url)
 database = Database(database_url)
 engine = create_engine(database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

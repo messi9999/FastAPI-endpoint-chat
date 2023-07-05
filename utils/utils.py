@@ -67,7 +67,7 @@ async def openAI(prompt):
 async def ChatGPT(context, chat_history, question):
     chat = ChatOpenAI(
         temperature=0.1,
-        openai_api_key="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",
+        openai_api_key=os.getenv("OPENAI_API_KEY"),
         streaming=True,
     )
     prompt = ChatPromptTemplate.from_messages(
